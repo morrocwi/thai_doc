@@ -92,6 +92,12 @@ letter/document to a Thai government agency, check whether
   `scripts/README_google_docs_batch.md`. Like `generate_doc.py`, it does
   not decide Thai composition/spacing for you — feed it text that already
   went through the semantic pipeline in `docs/thai-worldclass/`.
+- For an actually-live Google Docs connection (not just dry-run request
+  JSON), see `docs/google-docs-mcp-integration.md` — a vetted, external,
+  NOT-vendored MCP server recommendation
+  (github.com/a-bonus/google-docs-mcp), bring-your-own-credentials, with
+  this repo's own vetting notes (license, maintenance, red-flag scan,
+  scope-limiting advice for installers who only want the Docs surface).
 
 ## How to use this skill end to end
 

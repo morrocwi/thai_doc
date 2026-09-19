@@ -97,13 +97,22 @@ also true of this workstation as of 2026-09-19, verified again here).
 
 Still open / not yet built, not guessed at:
 
-1. No direct Google Docs API/OAuth integration (would need a founder
-   decision on credential handling for this workspace).
+1. `scripts/google_docs_batch.py` builds batchUpdate request JSON
+   (dry-run, tested) and has a bring-your-own-credentials `apply_live()`
+   path, but that live path has never been exercised against a real
+   Google Doc in this environment (no credentials available here). For an
+   actually-live, more full-featured connection, see
+   `docs/google-docs-mcp-integration.md` — a vetted external MCP server
+   recommendation, not vendored into this repo.
 2. `scripts/generate_doc.py`'s `#SECTION#` marker parsing has a known false
    -positive edge case (`KNOWN_ISSUES.md` ISSUE 3).
 3. The bundled example template/data is not yet a gate-clean demonstration
    (see above) — a real one requires doing the semantic composition work,
    not just running a script.
+4. `scripts/google_docs_batch.py`'s `from-sections`/`from-lock` output is
+   not currently wired to `docs/google-docs-mcp-integration.md`'s
+   recommended MCP server — the two are complementary delivery paths, not
+   yet connected by an adapter (see that doc's "future work" note).
 
 ## Provenance
 
