@@ -120,4 +120,8 @@ metadata upstream; not copied verbatim) and uses `typst/typst`
 MIT (this repo's own `scripts/`, `templates/`, `examples/`, `tests/`).
 `docs/thai-worldclass/` carries its own provenance notes as described
 above; treat it as a distinct merged component, not originated in this
-repo.
+repo. `gov-templates/` is likewise a distinct component: it is real
+third-party government-agency material (see `gov-templates/README.md` and
+each agency's own `MANIFEST.md`), not authored by this repo and not
+covered by its MIT license — treat it as reference material republished
+for drafting purposes, not as licensed code/content of this repository.

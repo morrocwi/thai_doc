@@ -69,7 +69,29 @@
 \fi
 \makeatother
 \RequirePackage[protrusion=true,expansion=false]{microtype}
-\setlength{\parindent}{1.25em}
+% First-line indent reconciled 2026-09-19 to match the Typst house module
+% (typst/thai-worldclass.typ: first-indent: 2.5cm) -- the two PDF-producing
+% routes in this pack must use the SAME physical first-line-indent for the
+% same document genre. The previous value here, 1.25em, is a font-relative
+% unit that at this class's 10pt body size resolves to ~0.44cm -- nearly 6x
+% smaller than the Typst side's 2.5cm, an unreconciled cross-format drift
+% that was never caught because nobody had compared the two numerically
+% side by side. See ../../KNOWN_ISSUES.md for the general discipline this
+% follows (record a found inconsistency, don't silently absorb it).
+%
+% OPEN ITEM, not silently decided: 2.5cm is a large fraction (~30%) of a
+% single column's width in the @twocolumn geometry above (usable column
+% width ~8.5cm at these margins/columnsep), which may look disproportionate
+% for a two-column academic layout even though it matches the Typst side's
+% uniform choice. No XeLaTeX was available in the environment this change
+% was made in to render and visually confirm either the one-column or
+% two-column case (this pack's own protocols mandate XeLaTeX, and only
+% pdflatex was present, which cannot set Thai fonts correctly) -- per the
+% render-feedback-loop rule in protocols/08-release-checklist.md, this
+% value change is therefore reconciled/consistent-on-paper but NOT yet
+% visually verified. Compile latex/examples/C_worldclass_twocolumn.tex
+% with XeLaTeX and inspect the rendered indent before calling this closed.
+\setlength{\parindent}{2.5cm}
 \setlength{\parskip}{0pt}
 \setlength{\emergencystretch}{0.7em}
 \pretolerance=400

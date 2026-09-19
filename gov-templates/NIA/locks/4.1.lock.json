@@ -1,0 +1,209 @@
+{
+  "source_file": "4.1_จดหมายปิดโครงการนวัตกรรม (Social).docx",
+  "paragraphs": [
+    [
+      {
+        "type": "meta",
+        "text": "-หัวบริษัท-"
+      }
+    ],
+    [
+      {
+        "type": "meta",
+        "text": "(ตัวอย่าง ร่างจดหมาย)"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tวันที่ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...................................",
+        "label": null,
+        "id": "ph0"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เรื่อง\tขอปิดโครงการนวัตกรรม โครงการ “",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".............(ชื่อโครงการ).............",
+        "label": "ชื่อโครงการ",
+        "id": "ph1"
+      },
+      {
+        "type": "fixed",
+        "text": "”",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เรียน\tผู้อำนวยการ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tสำนักงานนวัตกรรมแห่งชาติ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "สิ่งที่ส่งมาด้วย\t1.แบบสรุปรายงานโครงการนวัตกรรม ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t2.รายงานสรุปผลการดำเนินโครงการฉบับสมบูรณ์ จำนวน 3 เล่ม",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tสืบเนื่องจากข้าพเจ้า ได้รับทุนสนับสนุนโครงการ “",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".......(รูปแบบที่ได้รับการสนับสนุน).......",
+        "label": "รูปแบบที่ได้รับการสนับสนุน",
+        "id": "ph2"
+      },
+      {
+        "type": "fixed",
+        "text": "” ภายใต้การสนับสนุนในโครงการนวัตกรรม "
+      },
+      {
+        "type": "placeholder",
+        "raw": ".......(แพลตฟอร์มส่งเสริมธุรกิจนวัตกรรมสาขา)......",
+        "label": "แพลตฟอร์มส่งเสริมธุรกิจนวัตกรรมสาขา",
+        "id": "ph3"
+      },
+      {
+        "type": "fixed",
+        "text": "  เพื่อดำเนินโครงการ “"
+      },
+      {
+        "type": "placeholder",
+        "raw": ".............(ชื่อโครงการ)................",
+        "label": "ชื่อโครงการ",
+        "id": "ph4"
+      },
+      {
+        "type": "fixed",
+        "text": "” กับทางสำนักงานนวัตกรรมแห่งชาติ (องค์การมหาชน) ไปแล้วนั้น",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tบัดนี้ ข้าพเจ้าได้ดำเนินงานโครงการในส่วนของการพัฒนาต้นแบบ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "......................",
+        "label": null,
+        "id": "ph5"
+      },
+      {
+        "type": "fixed",
+        "text": "เสร็จเรียบร้อยแล้ว พร้อมทั้งรายงานผลทดสอบประสิทธิภาพ ดังเอกสารแนบ ดังนั้น บริษัทฯ จึงขอปิดโครงการนวัตกรรม \n“"
+      },
+      {
+        "type": "placeholder",
+        "raw": ".........(ชื่อโครงการ)..........",
+        "label": "ชื่อโครงการ",
+        "id": "ph6"
+      },
+      {
+        "type": "fixed",
+        "text": "” และขอเบิกจ่ายเงินสนับสนุนที่เหลืออีก 10% ของมูลค่าการสนับสนุนโครงการรวม",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tจึงเรียนมาเพื่อโปรดพิจารณาอนุมัติ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tขอแสดงความนับถือ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t(ประทับตราบริษัท)",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "placeholder",
+        "raw": "..................................................",
+        "label": null,
+        "id": "ph7"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\t(",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "................................................",
+        "label": null,
+        "id": "ph8"
+      },
+      {
+        "type": "fixed",
+        "text": ")",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t   บริษัท/วิสาหกิจ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "........................................",
+        "label": null,
+        "id": "ph9"
+      }
+    ]
+  ]
+}

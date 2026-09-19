@@ -1,5 +1,10 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-*.docx
+# Generated/scratch docx output at repo root only. Anything under
+# gov-templates/ or examples/ is authoritative source material, not
+# generated output, and must never be silently excluded (caught before a
+# push: all 10 NIA letter .docx source files were being ignored by the
+# original blanket "*.docx" rule below).
+/*.docx
 !examples/*.docx

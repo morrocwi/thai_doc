@@ -1,0 +1,419 @@
+{
+  "source_file": "2.5_ใบสำคัญรับเงิน.docx",
+  "paragraphs": [
+    [
+      {
+        "type": "fixed",
+        "text": "(ตัวอย่าง) ใบสำคัญรับเงิน",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\t\tวันที่ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...............................................",
+        "label": null,
+        "id": "ph0"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ข้าพเจ้า (นาย/นาง/นางสาว) ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".....................................................................................................................................",
+        "label": null,
+        "id": "ph1"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "อยู่บ้านเลขที่ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "....................",
+        "label": null,
+        "id": "ph2"
+      },
+      {
+        "type": "fixed",
+        "text": " หมู่ที่ "
+      },
+      {
+        "type": "placeholder",
+        "raw": "...................",
+        "label": null,
+        "id": "ph3"
+      },
+      {
+        "type": "fixed",
+        "text": " ซอย "
+      },
+      {
+        "type": "placeholder",
+        "raw": "................................",
+        "label": null,
+        "id": "ph4"
+      },
+      {
+        "type": "fixed",
+        "text": " ถนน "
+      },
+      {
+        "type": "placeholder",
+        "raw": ".........................................................",
+        "label": null,
+        "id": "ph5"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "แขวง/ตำบล ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "..............................",
+        "label": null,
+        "id": "ph6"
+      },
+      {
+        "type": "fixed",
+        "text": " เขต/อำเภอ "
+      },
+      {
+        "type": "placeholder",
+        "raw": "..........................................",
+        "label": null,
+        "id": "ph7"
+      },
+      {
+        "type": "fixed",
+        "text": " จังหวัด "
+      },
+      {
+        "type": "placeholder",
+        "raw": "....................................................",
+        "label": null,
+        "id": "ph8"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "โทรศัพท์ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "....................................................................................",
+        "label": null,
+        "id": "ph9"
+      },
+      {
+        "type": "fixed",
+        "text": " โทรสาร "
+      },
+      {
+        "type": "placeholder",
+        "raw": "..................................................................",
+        "label": null,
+        "id": "ph10"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เลขประจำตัวบัตรประชาชน ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "......................................................................................................................................",
+        "label": null,
+        "id": "ph11"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ได้รับเงิน จาก ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "............................................................................................................................................................",
+        "label": null,
+        "id": "ph12"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ที่อยู่ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...........................................................................................................................................................................",
+        "label": null,
+        "id": "ph13"
+      }
+    ],
+    [
+      {
+        "type": "placeholder",
+        "raw": "....................................................................................................................................................................................",
+        "label": null,
+        "id": "ph14"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เลขประจำตัวผู้เสียภาษี ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "..............................................................................................................................................",
+        "label": null,
+        "id": "ph15"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "รายการดังนี้",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "จำนวนเงิน (ตัวอักษร) ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "............................................................................................................................",
+        "label": null,
+        "id": "ph16"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tลงชื่อ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "........................................",
+        "label": null,
+        "id": "ph17"
+      },
+      {
+        "type": "fixed",
+        "text": " ผู้รับเงิน",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\t     (",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...........................................",
+        "label": null,
+        "id": "ph18"
+      },
+      {
+        "type": "fixed",
+        "text": ")",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tลงชื่อ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "........................................",
+        "label": null,
+        "id": "ph19"
+      },
+      {
+        "type": "fixed",
+        "text": " ผู้จ่ายเงิน",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\t     (",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...........................................",
+        "label": null,
+        "id": "ph20"
+      },
+      {
+        "type": "fixed",
+        "text": ")",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "หมายเหตุ: \tแนบสำเนาบัตรบัตรประชาชน , สำเนาหนังสือการหักภาษี ณ ที่จ่าย ,",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tสำเนาสัญญาจ้าง (ถ้ามี) พร้อมประทับตรา และรับรองสำเนาถูกต้อง",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "โปรดดำเนินการและตรวจสอบความถูกต้อง ดังนี้",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "หากกรอกรายละเอียดโดยการพิมพ์ หรือเขียน ให้พิมพ์หรือเขียนอย่างใดอย่างหนึ่งโดยตลอดทั้งใบสำคัญรับเงิน",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ชื่อ ที่อยู่ เลขประจำตัวบัตรประชาชนผู้รับเงิน ตรงตามสำเนาบัตรประชาชน",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ชื่อ ที่อยู่ เลขประจำตัวผู้เสียภาษีบริษัท ตรงตามหนังสือรับรองบริษัท ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "จำนวนเงินตัวอักษร ตรงกับจำนวนเงินตัวเลข",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ผู้รับเงินและผู้จ่ายเงินลงลายมือชื่อเรียบร้อยแล้ว",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "กรอกเลขประจำตัวผู้เสียภาษี",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เอกสารแนบ ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ใบสำคัญรับเงินต้องแนบเอกสารประกอบใบสำคัญรับเงิน ดังนี้",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "สำเนาบัตรประชาชน (รับรองสำเนาถูกต้องเรียบร้อยแล้วโดยผู้รับเงิน)",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "สำเนาหนังสือรับรองหักภาษี ณ ที่จ่าย (รับรองสำเนาถูกต้องเรียบร้อยแล้ว)",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "สัญญาจ้าง",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "ประวัติการทำงาน (CV) ของผู้รับเงิน",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "รายงานการดำเนินงานตามวงเงินที่รับเงิน (ไม่มีแบบฟอร์ม)",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ]
+  ]
+}

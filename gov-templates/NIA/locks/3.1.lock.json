@@ -1,0 +1,228 @@
+{
+  "source_file": "3.1_จดหมายขอส่งรายงานรายไตรมาส (Social).docx",
+  "paragraphs": [
+    [
+      {
+        "type": "meta",
+        "text": "-หัวบริษัท-"
+      }
+    ],
+    [
+      {
+        "type": "meta",
+        "text": "(ตัวอย่าง ร่างจดหมาย)"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tวันที่ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "...................................",
+        "label": null,
+        "id": "ph0"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เรื่อง\tขอนำส่งรายงานความก้าวหน้ารายไตรมาส โครงการ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".............(ชื่อโครงการ)................",
+        "label": "ชื่อโครงการ",
+        "id": "ph1"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "เรียน\tผู้อำนวยการ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tสำนักงานนวัตกรรมแห่งชาติ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tสืบเนื่องจากข้าพเจ้า ได้รับทุนสนับสนุนโครงการ “",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".......(รูปแบบที่ได้รับการสนับสนุน).......",
+        "label": "รูปแบบที่ได้รับการสนับสนุน",
+        "id": "ph2"
+      },
+      {
+        "type": "fixed",
+        "text": "” ภายใต้การสนับสนุนในโครงการนวัตกรรม "
+      },
+      {
+        "type": "placeholder",
+        "raw": ".......(แพลตฟอร์มส่งเสริมธุรกิจนวัตกรรมสาขา)......",
+        "label": "แพลตฟอร์มส่งเสริมธุรกิจนวัตกรรมสาขา",
+        "id": "ph3"
+      },
+      {
+        "type": "fixed",
+        "text": "  เพื่อดำเนินโครงการ “"
+      },
+      {
+        "type": "placeholder",
+        "raw": ".............(ชื่อโครงการ)................",
+        "label": "ชื่อโครงการ",
+        "id": "ph4"
+      },
+      {
+        "type": "fixed",
+        "text": "” กับทางสำนักงานนวัตกรรมแห่งชาติ (องค์การมหาชน) โดยมีระยะเวลาการดำเนินโครงการฯ ตั้งแต่วันที่"
+      },
+      {
+        "type": "placeholder",
+        "raw": "..............",
+        "label": null,
+        "id": "ph5"
+      },
+      {
+        "type": "fixed",
+        "text": "เดือน"
+      },
+      {
+        "type": "placeholder",
+        "raw": "..................",
+        "label": null,
+        "id": "ph6"
+      },
+      {
+        "type": "fixed",
+        "text": "ถึงวันที่"
+      },
+      {
+        "type": "placeholder",
+        "raw": "..............",
+        "label": null,
+        "id": "ph7"
+      },
+      {
+        "type": "fixed",
+        "text": "เดือน"
+      },
+      {
+        "type": "placeholder",
+        "raw": ".......................",
+        "label": null,
+        "id": "ph8"
+      },
+      {
+        "type": "fixed",
+        "text": " นั้น",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tทั้งนี้ ตามที่ สนช. ได้กำหนดให้ผู้รับทุนสนับสนุนนำส่งเอกสารรายงานความก้าวหน้าการดำเนินโครงการรายไตรมาสมายังสำนักงานฯ นั้น ในการนี้ ข้าพเจ้าขอจัดส่งรายงานความก้าวหน้าในการดำเนินงานโครงการระหว่างเดือน",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": ".........",
+        "label": null,
+        "id": "ph9"
+      },
+      {
+        "type": "fixed",
+        "text": " ถึงเดือน"
+      },
+      {
+        "type": "placeholder",
+        "raw": "...........",
+        "label": null,
+        "id": "ph10"
+      },
+      {
+        "type": "fixed",
+        "text": " ดังมีรายละเอียดดังเอกสารแนบ ",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\tจึงเรียนมาเพื่อโปรดพิจารณา",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\tขอแสดงความนับถือ",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t(ประทับตราบริษัท)",
+        "boundary_left": true,
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "placeholder",
+        "raw": "..................................................",
+        "label": null,
+        "id": "ph11"
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t\t(",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "................................................",
+        "label": null,
+        "id": "ph12"
+      },
+      {
+        "type": "fixed",
+        "text": ")",
+        "boundary_right": true
+      }
+    ],
+    [
+      {
+        "type": "fixed",
+        "text": "\t\t\t\t\t\t   บริษัท/วิสาหกิจ ",
+        "boundary_left": true
+      },
+      {
+        "type": "placeholder",
+        "raw": "........................................",
+        "label": null,
+        "id": "ph13"
+      }
+    ]
+  ]
+}

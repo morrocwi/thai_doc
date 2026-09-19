@@ -118,12 +118,61 @@ def lint_sections(sections: dict[str, str], mode: str = "google-docs-justified")
     return all_ok
 
 
+# Unified paragraph-start ("ขึ้นย่อหน้าใหม่") policy, reconciled 2026-09-19
+# across every output format this repo and the merged docs/thai-worldclass/
+# pack produce (txt, html, docx here; Typst and LaTeX in
+# docs/thai-worldclass/ -- see that pack's thai-worldclass.typ and
+# latex/thaiarxiv.sty, both now set to the SAME 2.5cm value). A new
+# paragraph is marked by a STRUCTURAL first-line-indent property of the
+# output format (docx paragraph_format, HTML CSS text-indent, Typst
+# par.first-line-indent, LaTeX \parindent) -- never by inserting a literal
+# tab/space character into the text content, per the general principle
+# already stated in docs/thai-worldclass/protocols/09-typst.md's
+# "Grid-not-spaces rule" and consistent with KNOWN_ISSUES.md ISSUE 1 (don't
+# fix Thai text problems by injecting characters into content).
+#
+# The ONE justified exception is plain .txt: it has no structural styling
+# concept at all, so there is no way to express "first-line indent" other
+# than a literal character. For that one format only, a single leading TAB
+# is used per body paragraph -- chosen (not an arbitrary pick) to match
+# what gov-templates/NIA's real official templates actually do (verified:
+# their body paragraphs start with a literal \t, not spaces or a dot
+# leader) rather than inventing a different plain-text convention.
+#
+# TITLE (and any other non-body section a caller may add) is excluded from
+# indentation -- it is a heading, not body prose.
+BODY_FIRST_LINE_INDENT_CM = 2.5
+NON_BODY_SECTIONS = {"_preamble", "TITLE"}
+
+
 def write_txt(sections: dict[str, str], out_path: pathlib.Path) -> None:
     parts = []
     for name, text in sections.items():
         if name != "_preamble":
             parts.append(f"#{name}#")
-        parts.append(text)
+        if name in NON_BODY_SECTIONS:
+            parts.append(text)
+        else:
+            # One leading tab per paragraph -- the plain-text-only exception
+            # described above. Paragraphs are joined with a SINGLE newline,
+            # not a blank line: the indent alone marks a new paragraph, so a
+            # blank-line gap on top of it would double up two different
+            # "new paragraph" signals and read as one line of dead space too
+            # many (founder correction 2026-09-19: "เว้นเกินไปหนึ่งบรรทัด" --
+            # spaced one line too much). This matches the same "indent, not
+            # gap" policy already applied to docx/html below and to Typst/
+            # LaTeX in docs/thai-worldclass/ -- one convention, everywhere.
+            # .strip() each fragment (not just filter on it) -- a source
+            # text with a "\n\n\n" gap (e.g. a Jinja2 template with a blank
+            # line already between two {{ vars }} that are themselves
+            # separated by another blank template line) otherwise leaves a
+            # stray leading "\n" inside the fragment, landing the tab on an
+            # empty line instead of the real paragraph text (adversarial
+            # review finding 2026-09-19, confirmed against this exact
+            # template+data pair; write_docx already did this correctly via
+            # para.strip(), this brings write_txt/write_html in line with it).
+            paras = [p.strip() for p in text.split("\n\n") if p.strip()]
+            parts.append("\n".join("\t" + p for p in paras))
         parts.append("")
     out_path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -132,17 +181,27 @@ def write_html(sections: dict[str, str], out_path: pathlib.Path, title: str = ""
     # lang="th" + a Thai-safe font stack. No ZWSP/space patching is applied
     # here (see module docstring / ../KNOWN_ISSUES.md ISSUE 1); real line-fit
     # problems belong to the source text's composition, not this renderer.
+    # Body paragraphs get a structural CSS text-indent (see policy note
+    # above); TITLE does not. Paragraph gap is intentionally near-zero
+    # (margin: 0 0 0.15em) to match the "first-line indent + zero/restrained
+    # extra gap" convention docs/thai-worldclass/protocols/04-docx-pdf.md
+    # specifies -- indent and gap are not meant to be doubled up.
     body_html = []
     for name, text in sections.items():
         if name == "_preamble":
             continue
-        paragraphs = [p for p in text.split("\n\n") if p.strip()]
+        is_body = name not in NON_BODY_SECTIONS
+        # .strip() each fragment -- see the matching comment in write_txt;
+        # without it a "\n\n\n" source gap leaves a stray leading newline
+        # inside the <p> tag.
+        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
         body_html.append(f'<section data-name="{name}">')
         for p in paragraphs:
             escaped = (
                 p.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             )
-            body_html.append(f"<p>{escaped}</p>")
+            cls = ' class="body-p"' if is_body else ""
+            body_html.append(f"<p{cls}>{escaped}</p>")
         body_html.append("</section>")
     html = f"""<!DOCTYPE html>
 <html lang="th">
@@ -151,7 +210,8 @@ def write_html(sections: dict[str, str], out_path: pathlib.Path, title: str = ""
 <title>{title}</title>
 <style>
 body {{ font-family: "Noto Sans Thai", "TH Sarabun New", sans-serif; line-height: 1.6; }}
-p {{ word-break: normal; overflow-wrap: break-word; }}
+p {{ word-break: normal; overflow-wrap: break-word; margin: 0 0 0.15em; }}
+p.body-p {{ text-indent: {BODY_FIRST_LINE_INDENT_CM}cm; }}
 </style>
 </head>
 <body>
@@ -164,7 +224,7 @@ p {{ word-break: normal; overflow-wrap: break-word; }}
 
 def write_docx(sections: dict[str, str], out_path: pathlib.Path, font_name: str = "TH Sarabun New") -> None:
     import docx
-    from docx.shared import Pt
+    from docx.shared import Cm, Pt
 
     doc = docx.Document()
     style = doc.styles["Normal"]
@@ -199,12 +259,20 @@ def write_docx(sections: dict[str, str], out_path: pathlib.Path, font_name: str 
         heading.add_run(sections["TITLE"])
 
     for name, text in sections.items():
-        if name in ("_preamble", "TITLE"):
+        if name in NON_BODY_SECTIONS:
             continue
         for para in text.split("\n\n"):
             para = para.strip()
             if para:
-                doc.add_paragraph(para)
+                p = doc.add_paragraph(para)
+                # Structural first-line indent (see the policy note above
+                # write_txt) -- never a literal leading tab/space in the
+                # text content. Zero extra paragraph gap: indent and gap
+                # are not doubled up (matches
+                # docs/thai-worldclass/protocols/04-docx-pdf.md).
+                p.paragraph_format.first_line_indent = Cm(BODY_FIRST_LINE_INDENT_CM)
+                p.paragraph_format.space_after = Pt(0)
+                p.paragraph_format.space_before = Pt(0)
 
     doc.save(str(out_path))
 
