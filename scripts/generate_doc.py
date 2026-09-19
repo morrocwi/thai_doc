@@ -200,8 +200,22 @@ def write_html(sections: dict[str, str], out_path: pathlib.Path, title: str = ""
             escaped = (
                 p.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             )
+            # A single "\n" WITHIN one paragraph fragment (as opposed to the
+            # "\n\n" that separates paragraphs) is a soft line break, e.g. a
+            # signature block's signoff/name/position stacked on separate
+            # lines within what is logically one closing block. write_docx
+            # already renders this correctly (python-docx auto-converts an
+            # embedded "\n" in run text into <w:br/>); this was NOT mirrored
+            # here, so the same source text visibly diverged between docx
+            # and html output -- found 2026-09-19 by rendering both to an
+            # image and comparing them side by side (per founder request:
+            # "แคปเจอร์จอ เทียบกันด้วยนะว่าตรงกันไหม แล้วปรับแก้ให้ตรงกัน" --
+            # screenshot and compare whether they match, then fix to match).
+            escaped = escaped.replace("\n", "<br>")
             cls = ' class="body-p"' if is_body else ""
-            body_html.append(f"<p{cls}>{escaped}</p>")
+            tag = "h1" if name == "TITLE" else "p"
+            tag_cls = ' class="title"' if name == "TITLE" else cls
+            body_html.append(f"<{tag}{tag_cls}>{escaped}</{tag}>")
         body_html.append("</section>")
     html = f"""<!DOCTYPE html>
 <html lang="th">
@@ -210,8 +224,9 @@ def write_html(sections: dict[str, str], out_path: pathlib.Path, title: str = ""
 <title>{title}</title>
 <style>
 body {{ font-family: "Noto Sans Thai", "TH Sarabun New", sans-serif; line-height: 1.6; }}
-p {{ word-break: normal; overflow-wrap: break-word; margin: 0 0 0.15em; }}
+p, h1.title {{ word-break: normal; overflow-wrap: break-word; margin: 0 0 0.15em; }}
 p.body-p {{ text-indent: {BODY_FIRST_LINE_INDENT_CM}cm; }}
+h1.title {{ font-size: 1.6em; font-weight: bold; margin-bottom: 0.4em; border-bottom: 1px solid #4472c4; padding-bottom: 0.2em; }}
 </style>
 </head>
 <body>
