@@ -1,0 +1,8 @@
+interface:
+  display_name: "Thai World-Class Publication System"
+  short_description: "Fail-closed Thai composition across Docs, DOCX/PDF, Typst/PDF, and XeLaTeX/arXiv"
+  icon_small: "./assets/preview.png"
+  icon_large: "./assets/preview.png"
+  default_prompt: "Create or revise Thai publication content using the mandatory pipeline Meaning -> Thought Unit -> Breath Weight -> Rhythm Variation -> Line Fit -> Renderer -> QA. Keep the semantic source renderer-neutral, never patch spacing before recomposition, use Typst as compositor/layout oracle only when appropriate, and never claim READY until all applicable gates pass."
+policy:
+  allow_implicit_invocation: true

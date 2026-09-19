@@ -1,55 +1,70 @@
 ---
 name: thai_doc
-description: Load before generating or fixing any Thai-language document meant to be pasted or opened in an external tool (desktop apps, Google Docs, Word, a browser, a PDF viewer). Fixes the "ตัดบรรทัดไม่ได้" problem (Thai has no inter-word spaces, so layout engines overflow or break mid-word) by inserting dictionary-segmented zero-width spaces, and generates template-accurate Thai documents (txt/html/docx) from a Jinja2 template + data file. Trigger on: "พิมพ์ภาษาไทย", "ตัดบรรทัดภาษาไทย", "ตัดคำภาษาไทยไม่ได้", "สร้างเอกสารภาษาไทยตามเทมเพลท", "paste Thai text into Google Docs/Word", any request to generate a Thai-language letter/certificate/form from a template.
+description: Load before generating, fixing, or reviewing any Thai-language document meant for an external tool (Google Docs, Word/DOCX, a browser, a PDF, Typst, LaTeX/arXiv). Covers the "ตัดบรรทัดไม่ได้"/justified-Thai-spacing problem and template-accurate document generation. Trigger on "พิมพ์ภาษาไทย", "ตัดบรรทัดภาษาไทย", "จัดหน้าเอกสารภาษาไทย", "สร้างเอกสารภาษาไทยตามเทมเพลท", "paste Thai text into Google Docs/Word", Thai formal letters/reports/academic papers, or any Thai justified-text layout problem.
 ---
 
 # thai_doc
 
 Public repo: https://github.com/morrocwi/thai_doc (MIT license, code only).
 
-## When to use this
+## READ FIRST — `KNOWN_ISSUES.md`
 
-- Someone needs Thai text that will be pasted into Google Docs, Word, a chat
-  box, or any tool whose line-wrapping mangles long Thai runs.
-- Someone needs a Thai document (letter, certificate, form, ...) generated
-  accurately from a template + data, in txt/html/docx.
+Before doing anything else, read `<repo>/KNOWN_ISSUES.md` in full. It
+records real bugs and a real architectural mistake already found in this
+repo's own history (a v1 approach that inserted zero-width spaces
+everywhere, which is a documented and mechanically-provable-wrong pattern),
+so the same mistake is not repeated. This applies to every AI vendor
+session, not just the one that wrote it.
 
-## How to use it
+## Primary system: `docs/thai-worldclass/`
 
-1. Fixing a block of Thai text for pasting elsewhere:
-   ```
-   python3 <repo>/scripts/thai_linebreak.py "<Thai text>"
-   ```
-   The output is byte-identical to the input except for inserted U+200B
-   (zero-width space) characters at real word boundaries (pythainlp `newmm`
-   dictionary tokenizer). Paste the output directly -- ZWSP survives
-   copy-paste and gives the destination editor real break points. Verify
-   losslessness with `strip_zwsp(fixed) == original` before trusting output
-   on anything consequence-bearing (see `tests/test_thai_linebreak.py`).
+The actual Thai composition discipline lives in
+`<repo>/docs/thai-worldclass/SKILL.md` (a merged external pack, "Thai
+World-Class Publication System" v2.1.0) — **read that file next, it is the
+primary authority for HOW to compose/fix Thai text**, not this file. It
+gives:
 
-2. Generating a document from a template:
-   ```
-   python3 <repo>/scripts/generate_doc.py <template.txt.j2> <data.yaml> -o out.docx -f docx
-   ```
-   See `<repo>/README.md` for the template format (`#SECTION#` markers +
-   Jinja2 placeholders) and the full option list (`-f txt|html|docx`).
+- 17 documented, named AI failure modes for Thai composition (read them —
+  they are specific and empirically demonstrated, not generic advice);
+- the mandatory pipeline: Meaning → Thought Unit → Breath Weight → Rhythm
+  Variation → Line Fit → Renderer Adaptation → Preflight → Render Feedback
+  → Release Gate;
+- per-route protocols (`docs/thai-worldclass/protocols/`) for Google Docs,
+  DOCX/PDF, Typst, LaTeX/arXiv, one-column vs two-column house styles, and
+  a release checklist;
+- mechanical (non-semantic) lint/preflight scripts that catch known-unsafe
+  patterns (control characters used as spacing patches, stretchable spaces
+  in Thai-dominant justified paragraphs, orphaned dependent connectors).
 
-## What this is NOT yet
+## This repo's own tooling (`scripts/`)
 
-Read `<repo>/README.md`'s "Status / open decisions" section before assuming
-capability that isn't built: no direct Google Docs API integration yet (the
-`txt` output is copy-paste-ready instead, which needs no OAuth/credentials),
-no PDF output yet, only one example template exists. Do not claim these are
-supported without first building and testing them.
+- `scripts/generate_doc.py` — Jinja2 template + yaml/json data →
+  `.txt`/`.html`/`.docx`. It does **not** auto-patch Thai spacing (see
+  `KNOWN_ISSUES.md` ISSUE 1 for why that was removed). Run with `--lint` to
+  get a mechanical report from `docs/thai-worldclass/scripts/thai_semantic_lint.py`
+  against the rendered text; add `--strict` to fail the run on hard
+  findings. A lint PASS is necessary but not sufficient — the semantic
+  thought-unit/breath-level work in `docs/thai-worldclass/protocols/01-thai-semantic-breathing.md`
+  still has to actually happen for the source prose, this script cannot do
+  it for you.
+- `scripts/thai_linebreak.py` — demoted, diagnostic-only pythainlp word
+  segmentation. Do not use its output directly in a user-facing document;
+  read its module docstring and `KNOWN_ISSUES.md` ISSUE 1 before touching
+  it.
 
-## Design note (readout-first)
+## How to use this skill end to end
 
-The line-break fix is a wrapper around an existing, external dictionary
-tokenizer (PyThaiNLP `newmm`) -- it is not a from-scratch Thai word-
-segmentation algorithm, and its accuracy is bounded by that tokenizer's own
-dictionary coverage (proper nouns, neologisms, and domain jargon outside the
-dictionary may tokenize imperfectly). Treat "this word boundary is correct"
-as a `finite_diagnostic` readout of the tokenizer on the given input, not a
-guaranteed-correct segmentation -- verify on your own template's actual
-vocabulary before trusting it on a high-stakes document (a legal contract,
-an official certificate).
+1. Read `KNOWN_ISSUES.md`.
+2. Read `docs/thai-worldclass/SKILL.md` and the specific protocol file for
+   your output route (`docs/thai-worldclass/protocols/00-routing.md` tells
+   you which one).
+3. Compose/revise the Thai source following that protocol's semantic
+   pipeline — this is judgment work an AI does while writing, not something
+   a script does after the fact.
+4. If generating from a template/data pair, use `scripts/generate_doc.py
+   --lint` to get a mechanical sanity check on the rendered text.
+5. Follow the release checklist: `docs/thai-worldclass/protocols/08-release-checklist.md`.
+6. Never claim "verified", "publication-ready", or "fixed" unless the
+   applicable gates in step 5 actually passed — this repo's own fail-closed
+   principle (inherited from the merged pack) applies to claims about this
+   repo's own output too.

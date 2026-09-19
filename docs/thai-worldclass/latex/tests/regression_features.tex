@@ -1,0 +1,66 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage{thaiarxiv}
+\title{Regression Test: Thai LaTeX Overflow System}
+\author{Automated QA}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Breakable equation}
+ข้อความไทยทดสอบจังหวะระดับปกติ\ThaiBreath และทดสอบสมการที่แตกตามโครงสร้าง:
+\begin{multline}
+F(\theta)=\sum_{i=1}^{N} a_i(\theta)+\sum_{j=1}^{M} b_j(\theta) \\
+{}+\sum_{k=1}^{K} c_k(\theta)+\sum_{r=1}^{R} d_r(\theta).
+\end{multline}
+
+\section{Full-width equation}
+\begin{WideEquation}
+\mathcal{Q}(\theta)=\sum_{i=1}^{N}\left[\alpha_i d_i(\theta)+\beta_i r_i(\theta)+\gamma_i \ell_i(\theta)+\delta_i u_i(\theta)\right].
+\end{WideEquation}
+
+\section{Long table}
+ก่อนตารางยาว\ThaiLightBreath ระบบต้องเปลี่ยนเป็นหน้าเต็มความกว้างโดยไม่ลดฟอนต์จนอ่านยาก
+\begin{FullWidthLongTable}
+\begin{longtable}{@{}p{0.12\textwidth}p{0.38\textwidth}p{0.38\textwidth}@{}}
+\caption{ตารางยาวสำหรับ regression test}\\
+\toprule
+ลำดับ & เงื่อนไข & การตอบสนอง \\
+\midrule
+\endfirsthead
+\toprule
+ลำดับ & เงื่อนไข & การตอบสนอง \\
+\midrule
+\endhead
+1 & สมการเกินคอลัมน์ & แตกโครงสร้างก่อน scaling \\
+2 & ตารางกว้าง & ใช้ full-width ก่อน scaling \\
+3 & ตารางยาว & ใช้ longtable บนหน้าเต็มความกว้าง \\
+4 & ฟอนต์หาย & หยุด build และแก้ source \\
+5 & overfull box & ถือเป็น build failure เมื่อเกินเกณฑ์ \\
+6 & text layer ผิด & หยุด final publication \\
+7 & วลีอังกฤษสั้น & ใช้ lexical atom เท่าที่จำเป็น \\
+8 & ภาษาไทย & ให้ XeTeX line breaking จัดการคำทั่วไป \\
+9 & citation & ต้องไม่มี unresolved citation \\
+10 & final PDF & ตรวจ render ทุกหน้า \\
+\bottomrule
+\end{longtable}
+\end{FullWidthLongTable}
+
+\begin{FullWidthLandscape}
+\section{Landscape escalation}
+\begin{center}
+\captionof{table}{Landscape escalation test}
+\begin{ReadableTable}
+\begin{tabularx}{\linewidth}{@{}lYYYYYY@{}}
+\toprule
+โหมด & A & B & C & D & E & F \\
+\midrule
+ทดสอบ & semantic & rhythm & equation & table & PDF & arXiv \\
+\bottomrule
+\end{tabularx}
+\end{ReadableTable}
+\end{center}
+\end{FullWidthLandscape}
+
+\section{Finish}
+เอกสารต้องกลับเข้าสู่โหมดสองคอลัมน์หลังจบหน้า full-width และ landscape\ThaiBreath หากถึงข้อความนี้โดยไม่มี overfull หรือ missing glyph ถือว่า transition ผ่าน
+\end{document}

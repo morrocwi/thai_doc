@@ -1,0 +1,16 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage{thaiarxiv}
+\begin{document}
+\section{Expected severe table overflow}
+\begin{table}[t]
+\centering
+\FitToColumn{%
+\begin{tabular}{llllllll}
+\toprule
+ColumnOneLong & ColumnTwoLong & ColumnThreeLong & ColumnFourLong & ColumnFiveLong & ColumnSixLong & ColumnSevenLong & ColumnEightLong \\
+\midrule
+alpha & beta & gamma & delta & epsilon & zeta & eta & theta \\
+\bottomrule
+\end{tabular}}
+\end{table}
+\end{document}

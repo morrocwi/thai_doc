@@ -1,0 +1,143 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[a4paper,top=17mm,bottom=20mm,left=16.5mm,right=16.5mm,headheight=13pt,headsep=5mm,footskip=10mm]{geometry}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb,mathtools,booktabs,tabularx,array,multicol,caption}
+\usepackage{xcolor,hyperref,fancyhdr,lastpage,orcidlink,tikz}
+\usetikzlibrary{positioning}
+\definecolor{ink}{HTML}{111111}
+\definecolor{muted}{HTML}{5B6168}
+\definecolor{lightbar}{HTML}{888888}
+\definecolor{rulec}{HTML}{BBBBBB}
+\setmainfont{Norasi.otf}[Ligatures=TeX,BoldFont=Norasi-Bold.otf,ItalicFont=Norasi-Italic.otf,BoldItalicFont=Norasi-BoldItalic.otf]
+\newfontfamily\uisans{Garuda.otf}[Ligatures=TeX,BoldFont=Garuda-Bold.otf,ItalicFont=Garuda-Oblique.otf,BoldItalicFont=Garuda-BoldOblique.otf]
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip=0pt plus .65pt
+\emergencystretch=0.7em
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{6.4mm}
+\setlength{\abovedisplayskip}{6pt plus2pt minus2pt}
+\setlength{\belowdisplayskip}{6pt plus2pt minus2pt}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
+\hypersetup{
+  colorlinks=true, linkcolor=ink, citecolor=ink, urlcolor=ink,
+  pdftitle={การจัดพิมพ์วิชาการภาษาไทยระดับสากลด้วย LaTeX - Scientific Letter},
+  pdfauthor={Yaoharee Lahtee},
+  pdfsubject={Two-column Thai scientific typesetting},
+  pdfkeywords={Thai; XeLaTeX; two-column; scientific letter; typography}
+}
+\newcommand{\TB}{\penalty0\hskip0.14em plus0.025em minus0.012em\relax}
+\newcommand{\MetaSep}{\hspace{0.45em}\textbullet\hspace{0.45em}}
+\newcommand{\shorttitle}{THAI SCIENTIFIC TYPESETTING WITH LATEX}
+\fancypagestyle{journal}{%
+  \fancyhf{}
+  \fancyhead[L]{\uisans\fontsize{7.3}{8.5}\selectfont YAOHAREE LAHTEE}
+  \fancyhead[C]{\uisans\fontsize{7.3}{8.5}\selectfont\shorttitle}
+  \fancyhead[R]{\uisans\fontsize{7.3}{8.5}\selectfont PREPRINT}
+  \renewcommand{\headrulewidth}{0.45pt}
+  \fancyfoot[L]{\uisans\fontsize{7.1}{8.3}\selectfont OCSI-TH-2026-001}
+  \fancyfoot[C]{\uisans\fontsize{7.1}{8.3}\selectfont \thepage\ / \pageref*{LastPage}}
+  \fancyfoot[R]{\uisans\fontsize{7.1}{8.3}\selectfont CC BY 4.0 \MetaSep 10.XXXX/ocsi.2026.001}
+  \renewcommand{\footrulewidth}{0.25pt}
+}
+\pagestyle{journal}
+\begin{document}
+\noindent\rule{\textwidth}{0.65pt}\par\vspace{4pt}
+\noindent\colorbox{lightbar}{\makebox[31mm][l]{\color{white}\uisans\bfseries\fontsize{7.8}{9}\selectfont LETTER / METHODS}}\hfill
+{\uisans\fontsize{7.5}{9}\selectfont OPEN ACCESS \MetaSep PREPRINT}\par
+\vspace{8pt}
+\begin{center}
+{\uisans\bfseries\fontsize{17.6}{20.4}\selectfont การจัดพิมพ์วิชาการภาษาไทยระดับสากลด้วย LaTeX:\par
+ระบบสองคอลัมน์สำหรับสมการ ตาราง และ metadata\par}
+\vspace{4pt}
+{\fontsize{9.8}{11.6}\selectfont \textbf{Yaoharee Lahtee}\,\orcidlink{0009-0005-3861-0626}\,*\par}
+{\fontsize{8.7}{10.4}\selectfont Open Civil Science Initiative, Bangkok, Thailand\par}
+{\uisans\fontsize{7.6}{9}\selectfont (Received 19 September 2026; revised --; accepted --; version 1.0)}
+\end{center}
+\vspace{4pt}
+\begin{center}\begin{minipage}{0.94\textwidth}
+\fontsize{9.15}{11.7}\selectfont\setlength{\emergencystretch}{1.5em}
+ระบบจัดพิมพ์เชิงวิทยาศาสตร์แบบสองคอลัมน์เพิ่มความหนาแน่นของข้อมูล\TB แต่สร้างข้อจำกัดต่อสมการยาว\TB ตาราง\TB รูป\TB และข้อความสองภาษาโดยตรง\TB งานนี้เสนอ workflow ที่ให้โครงสร้างมาก่อน scaling\TB อนุญาตให้วัตถุขยายเต็มสองคอลัมน์เมื่อจำเป็น\TB และใช้ preflight แบบ fail-closed เพื่อตรวจ overflow\TB font embedding\TB Unicode text layer\TB และ metadata ก่อนเผยแพร่
+\par\smallskip
+\noindent\textbf{DOI:} 10.XXXX/ocsi.2026.001 \qquad
+\textbf{arXiv:} XXXX.XXXXX \qquad
+\textbf{ORCID:} 0009-0005-3861-0626
+\end{minipage}\end{center}
+\vspace{4pt}\noindent\rule{\textwidth}{0.55pt}\vspace{5pt}
+
+\begin{multicols}{2}
+\raggedcolumns
+\fontsize{9.15}{11.7}\selectfont
+\noindent\textbf{บทนำ.}\quad
+เอกสารสองคอลัมน์ควรทำให้ผู้อ่านสแกนโครงสร้างของงานได้รวดเร็ว\TB โดยไม่ทำให้คอลัมน์แคบจนสมการและตารางเสียรูป\TB การตัดสินใจเรื่อง layout จึงต้องทำที่ระดับโครงสร้าง\TB ไม่ใช่ลดขนาดตัวอักษรจนอ่านยาก
+
+\medskip
+\noindent\textbf{Semantic composition.}\quad
+ภาษาไทยควรถูกแบ่งตามหน่วยคิดและน้ำหนักการหายใจก่อนเข้าสู่ compositor\TB ความยาวของหน่วยไม่ควรเท่ากันเป็นจังหวะเครื่องจักร\TB และการจัดเต็มบรรทัดต้องไม่แลกกับช่องว่างที่ผิดธรรมชาติ
+
+\begin{equation}
+Q_{\rm pub}=Q_{\rm sem}\,Q_{\rm layout}\,Q_{\rm PDF}.
+\end{equation}
+
+\noindent\textbf{Column-aware math.}\quad
+สมการที่อยู่ได้ในหนึ่งคอลัมน์ควรรักษาขนาดตัวอักษรปกติ\TB หากยาวเกินควรใช้ aligned หรือ split ก่อน\TB แล้วจึงพิจารณาขยายเต็มสองคอลัมน์
+
+\medskip
+\noindent\textbf{Metadata.}\quad
+ORCID เชื่อมตัวตนผู้เขียน\TB DOI และ arXiv identifier เชื่อมระเบียนบทความ\TB ส่วน version และ article history ช่วยให้การอ้างอิงฉบับที่ถูกต้องทำได้โดยไม่ต้องเดา
+
+\medskip
+\noindent\textbf{PDF integrity.}\quad
+การ compile สำเร็จยังไม่เพียงพอ\TB pipeline ต้องตรวจ missing glyph\TB overfull boxes\TB ฟอนต์ฝัง\TB ToUnicode\TB unresolved references\TB และ text extraction ของภาษาไทยด้วย
+
+\columnbreak
+\noindent\textbf{Layout escalation.}\quad
+ลำดับการแก้ควรเริ่มจาก recompose และ reflow\TB ต่อด้วย full-width object\TB landscape หรือ appendix ตามชนิดของเนื้อหา\TB scaling เป็นเพียงทางเลือกสุดท้ายและต้องมี threshold ที่ระบบสามารถปฏิเสธได้
+
+\medskip
+\noindent\textbf{Typography.}\quad
+สองคอลัมน์ระดับวารสารต้องรักษา baseline\TB page color\TB และความยาวบรรทัดให้สม่ำเสมอ\TB แต่ไม่ควรบังคับให้ทุกคอลัมน์มีจำนวนบรรทัดเท่ากัน หากทำให้ float หรือสมการผิดลำดับเหตุผล
+
+\medskip
+\noindent\textbf{Equation policy.}\quad
+สมการควรถูกแตกตามตรรกะของนิพจน์ก่อน\TB ตัวห้อยและเศษส่วนต้องไม่เล็กจนต่ำกว่าระดับอ่านสบาย\TB และ full-width equation ต้องยังรักษาหมายเลขไว้ในแนวเดียวกับสมการปกติ
+
+\medskip
+\noindent\textbf{Table policy.}\quad
+ตารางควรใช้ booktabs และพื้นที่ reflow ก่อน\TB หลีกเลี่ยงเส้นกรอบทุกช่อง\TB และย้ายไป full width หรือ appendix เมื่อข้อมูลไม่เหมาะกับ column width
+
+\medskip
+\noindent\textbf{Correspondence.}\quad
+* Corresponding author: [research email].\TB ORCID: 0009-0005-3861-0626.\TB License: CC BY 4.0.\TB Preprint / not peer reviewed.
+\end{multicols}
+
+\vspace{5pt}
+\begin{center}
+{\uisans\bfseries\fontsize{8.2}{9.8}\selectfont FULL-WIDTH MATHEMATICAL OBJECT}\par\vspace{3pt}
+\begin{equation}
+\mathcal{K}_A(W)=1
+\quad\Longleftrightarrow\quad
+\sup_{\nu\in\mathcal{V}(W)}
+\operatorname{Dist}\!\left(R_A^{\nu}[n],R_A[n]\right)
+\le \varepsilon_K
+\quad\text{for all admissible }\nu\text{ on }W.
+\label{eq:wide}
+\end{equation}
+\end{center}
+\vspace{4pt}
+
+\begin{center}
+\captionof{table}{Policy สำหรับวัตถุที่มีความเสี่ยงต่อ overflow ในเอกสารสองคอลัมน์}\label{tab:widepolicy}
+\small
+\begin{tabularx}{0.94\textwidth}{@{}>{\bfseries}lXXl@{}}
+\toprule
+ประเภท & ขั้นที่ 1 & ขั้นที่ 2 & Fail-closed trigger\\
+\midrule
+สมการยาว & split / aligned / multline & full-width equation & width ก่อนย่อเกิน 115\%\\
+ตารางกว้าง & reflow / tabularx & full width / landscape / appendix & scale รุนแรงหรืออ่านไม่ได้\\
+รูปกว้าง & crop อย่างมีเหตุผล & span สองคอลัมน์ & label หรือ caption ถูกตัด\\
+ภาษาไทย & semantic recompose & controlled break opportunity & spacing ผิดธรรมชาติ\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{document}

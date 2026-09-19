@@ -1,15 +1,25 @@
 """
-generate_doc.py -- fill a template with data and emit an accurate Thai
-document in one of: plain text (paste-ready, ZWSP-fixed), HTML, or .docx.
+generate_doc.py -- fill a template with data and emit a Thai document in
+one of: plain text, HTML, or .docx.
+
+CHANGED (see ../KNOWN_ISSUES.md "ISSUE 1"): this script used to run every
+Thai text field through thai_linebreak.fix_thai_linebreaks (blanket ZWSP
+insertion between all dictionary-tokenized words) before writing output.
+That approach is demoted -- it does not fix the failure mode that actually
+dominates in practice (Google Docs JUSTIFIED Thai stretching ordinary
+spaces) and it can split genuine semantic wholes. This script no longer
+applies that fix by default.
+
+What it does instead: renders the template as authored, then runs the
+merged `docs/thai-worldclass/scripts/thai_semantic_lint.py` mechanical
+gate (via --lint) against the final text and REPORTS findings rather than
+silently patching them. Real Thai line-wrap/rhythm problems must be fixed
+by recomposing the source text (see docs/thai-worldclass/SKILL.md), not by
+inserting control characters after the fact -- this script deliberately
+does not do that for you.
 
 Design goal: the SAME data + SAME template must produce byte-identical text
-content across every output format (only the container differs). The
-line-break fix (thai_linebreak.fix_thai_linebreaks) is applied to every
-Thai text field right before it is written into the output, so whichever
-tool the file lands in (Word, Google Docs via copy-paste of the .txt output,
-a browser rendering the .html, LibreOffice opening the .docx) wraps long
-Thai runs at real word boundaries instead of overflowing or splitting a
-word.
+content across every output format (only the container differs).
 
 Template format
 ----------------
@@ -24,23 +34,22 @@ output is plain text with simple block markers:
 
 generate_doc.py renders the Jinja2 template against the data file first
 (so {{ placeholders }} are substituted), THEN parses the #TITLE#/#BODY#
-markers, THEN applies the line-break fix to every piece of Thai text, THEN
-writes the requested output format. This order matters: the line-break fix
-must run on final text, after all substitution, or a placeholder value could
-reintroduce an un-fixed Thai run.
+markers, THEN (optionally, with --lint) runs the mechanical Thai lint gate,
+THEN writes the requested output format.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import pathlib
+import subprocess
 import sys
 
 import yaml
 from jinja2 import Template
 
-sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from thai_linebreak import fix_thai_linebreaks  # noqa: E402
+_REPO_ROOT = pathlib.Path(__file__).parent.parent
+_LINT_SCRIPT = _REPO_ROOT / "docs" / "thai-worldclass" / "scripts" / "thai_semantic_lint.py"
 
 
 def load_data(path: pathlib.Path) -> dict:
@@ -74,8 +83,39 @@ def parse_sections(rendered: str) -> dict[str, str]:
     return {name: "\n".join(lines).strip("\n") for name, lines in sections.items()}
 
 
-def fix_sections(sections: dict[str, str]) -> dict[str, str]:
-    return {name: fix_thai_linebreaks(text) for name, text in sections.items()}
+def lint_sections(sections: dict[str, str], mode: str = "google-docs-justified") -> bool:
+    """Run the merged docs/thai-worldclass mechanical lint against the final
+    rendered text and print its findings. Returns True iff lint passed for
+    every section. This is a REPORT-ONLY gate -- on failure it tells the
+    caller what to recompose; it never auto-patches the text (see
+    ../KNOWN_ISSUES.md "ISSUE 1" for why auto-patching was the mistake)."""
+    if not _LINT_SCRIPT.exists():
+        print(f"warning: lint script not found at {_LINT_SCRIPT}, skipping", file=sys.stderr)
+        return True
+    import tempfile
+
+    all_ok = True
+    for name, text in sections.items():
+        if not text.strip():
+            continue
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", encoding="utf-8", delete=False
+        ) as tmp:
+            tmp.write(text)
+            tmp_path = tmp.name
+        try:
+            result = subprocess.run(
+                [sys.executable, str(_LINT_SCRIPT), tmp_path, "--mode", mode],
+                capture_output=True,
+                text=True,
+            )
+        finally:
+            pathlib.Path(tmp_path).unlink(missing_ok=True)
+        if result.returncode != 0:
+            all_ok = False
+            print(f"--- lint findings in section '{name}' ---", file=sys.stderr)
+            print(result.stdout or result.stderr, file=sys.stderr)
+    return all_ok
 
 
 def write_txt(sections: dict[str, str], out_path: pathlib.Path) -> None:
@@ -89,8 +129,9 @@ def write_txt(sections: dict[str, str], out_path: pathlib.Path) -> None:
 
 
 def write_html(sections: dict[str, str], out_path: pathlib.Path, title: str = "") -> None:
-    # lang="th" + a Thai-safe font stack; ZWSP already embedded in the text
-    # provides the actual break points, this is a reasonable default only.
+    # lang="th" + a Thai-safe font stack. No ZWSP/space patching is applied
+    # here (see module docstring / ../KNOWN_ISSUES.md ISSUE 1); real line-fit
+    # problems belong to the source text's composition, not this renderer.
     body_html = []
     for name, text in sections.items():
         if name == "_preamble":
@@ -177,11 +218,28 @@ def main() -> int:
         "-f", "--format", choices=["txt", "html", "docx"], required=True, help="Output format"
     )
     ap.add_argument("--font", default="TH Sarabun New", help="Font for docx output")
+    ap.add_argument(
+        "--lint",
+        action="store_true",
+        help="run docs/thai-worldclass mechanical Thai lint on the rendered "
+        "text and report findings (does not modify output)",
+    )
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="with --lint, exit non-zero (and still write output) if lint finds hard failures",
+    )
     args = ap.parse_args()
 
     data = load_data(args.data)
     rendered = render_template(args.template, data)
-    sections = fix_sections(parse_sections(rendered))
+    sections = parse_sections(rendered)
+
+    lint_ok = True
+    if args.lint:
+        lint_ok = lint_sections(sections)
+        if lint_ok:
+            print("thai_semantic_lint: PASS (mechanical gate only -- see docs/thai-worldclass/SKILL.md)")
 
     if args.format == "txt":
         write_txt(sections, args.out)
@@ -191,6 +249,8 @@ def main() -> int:
         write_docx(sections, args.out, font_name=args.font)
 
     print(f"wrote {args.out} ({args.format})")
+    if args.strict and not lint_ok:
+        return 1
     return 0
 
 

@@ -1,32 +1,37 @@
 """
-thai_linebreak.py -- fix Thai line-wrap in external tools (Word, Google Docs,
-browsers, PDF renderers, ...).
+thai_linebreak.py -- pythainlp word-tokenization helper. DEMOTED, read
+KNOWN_ISSUES.md ("ISSUE 1") before using this for anything user-facing.
 
-THE PROBLEM
------------
-Thai script does not put spaces between words. Layout engines that were built
-for space-delimited scripts (the browser's/Word's/Google Docs' default line
-breaker) therefore either:
-  (a) never break a long Thai run at all (it overflows its box), or
-  (b) break at an arbitrary character, splitting a word (or a consonant from
-      its own vowel/tone mark) across two lines.
-
-THE FIX (standard, widely used technique -- not novel to this repo)
+THIS IS NOT THE PRIMARY LINE-BREAK FIX FOR THIS REPO ANYMORE.
 ---------------------------------------------------------------
-Segment the text into real Thai words with a dictionary-based tokenizer, then
-insert a ZERO WIDTH SPACE (U+200B) between words. U+200B is invisible and
-adds no visible spacing, but every mainstream layout engine (browsers, Word,
-Google Docs, LibreOffice, most PDF renderers) treats it as a legal line-break
-opportunity. Existing hard breaks (real spaces, newlines) are left untouched
-as-is -- ZWSP is only inserted at internal word boundaries that currently
-have no break opportunity at all.
+v1 of this repo used this module to insert a ZERO WIDTH SPACE (U+200B)
+between *every* adjacent pair of dictionary-tokenized Thai words and shipped
+that as "the fix" for Thai line-wrapping. That was wrong, and the mistake is
+recorded in detail in ../KNOWN_ISSUES.md ("ISSUE 1"): it conflates word
+segmentation with breath/rhythm segmentation (so it can split a genuine
+semantic whole, e.g. splitting "ความไว้วางใจ" mid-concept), it does not fix
+the failure mode that actually dominates in practice (Google Docs JUSTIFIED
+Thai stretching ordinary spaces into ugly gaps -- ZWSP never touches those),
+and running `docs/thai-worldclass/scripts/thai_semantic_lint.py` against its
+own output reproduces a 100% failure rate (every inserted ZWSP flagged).
+
+**For an actual fix, use the merged `docs/thai-worldclass/` protocol
+pipeline** (`SKILL.md` there is the entry point): it classifies real
+breath-level boundaries before choosing any renderer separator, and for
+Google Docs JUSTIFIED Thai it forbids exactly the blanket-ZWSP pattern this
+module used to produce as the direct output.
+
+**What this module is still useful for**: producing a first-pass pythainlp
+word segmentation as *diagnostic input* to a human or AI that is building
+the thought-unit/breath-level model by hand -- i.e. "where would a
+dictionary tokenizer split this" is one useful signal among several, never
+the final answer. `fix_thai_linebreaks()` below is kept, tested, and
+functionally unchanged from v1 (it is not broken code -- the mistake was
+treating its output as a finished document rather than diagnostic input);
+do not call it and paste the result directly into a user-facing document.
 
 This module depends on pythainlp's dictionary-based tokenizer (engine
-"newmm"). No new segmentation algorithm is invented here; this is a thin,
-auditable wrapper that:
-  1. keeps non-Thai runs (Latin words, numbers, punctuation, existing
-     whitespace) untouched, and
-  2. only inserts ZWSP between consecutive Thai *word* tokens.
+"newmm").
 """
 from __future__ import annotations
 

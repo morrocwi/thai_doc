@@ -1,44 +1,55 @@
 # thai_doc
 
-Accurate Thai-language document generation for external tools (desktop apps,
-Google Docs, browsers, PDF renderers, ...): fixes Thai line-wrapping and
-generates documents from a template + data file, with the same content
-guaranteed across every output format.
+Thai-language document generation and layout-fix system for external tools
+(Google Docs, Word/DOCX, browsers, PDF, Typst, LaTeX/arXiv).
 
-## The problem this solves
+## Start here
 
-Thai script has no spaces between words. Most layout engines (Word's,
-Google Docs', browsers') were built assuming space-delimited text, so a long
-Thai run either overflows its box unbroken, or gets broken at a random
-character -- sometimes splitting a consonant from its own vowel/tone mark.
+1. **`KNOWN_ISSUES.md`** — real bugs and a real architectural mistake
+   already found and recorded in this repo's own history. Read this before
+   changing anything; it exists specifically so the mistake is not
+   repeated by a future session (any AI vendor).
+2. **`docs/thai-worldclass/SKILL.md`** — the primary Thai-composition
+   discipline (merged v2.1.0 pack, see "Provenance" below). This is the
+   authority on *how* to fix Thai line-wrap/justification/layout problems.
+3. **`SKILL.md`** (this repo's own) — the entry point that ties the above
+   two together and describes this repo's own scripts.
 
-## The fix
+## What actually changed here (history, short version)
 
-`scripts/thai_linebreak.py` segments Thai text into real words with
-[PyThaiNLP](https://pythainlp.org/)'s dictionary-based tokenizer (`newmm`
-engine) and inserts a zero-width space (`U+200B`) between word boundaries.
-ZWSP is invisible and adds no visible spacing, but every mainstream layout
-engine treats it as a legal break point. This is a standard, widely used
-technique -- this module is a thin, tested, auditable wrapper around it, not
-a new algorithm.
+- **v1** (first push) shipped a naive fix: dictionary-tokenize Thai text
+  and insert a zero-width space (U+200B) between every word pair, then a
+  template→docx/html/txt generator that applied this automatically.
+- A much more thoroughly researched external pack,
+  `thai-worldclass-publication-system` v2.1.0, was obtained and — per an
+  explicit founder instruction — merged in as the **primary** direction,
+  with v1's own naive approach demoted after being shown, mechanically and
+  reproducibly, to be exactly the kind of failure that pack documents (see
+  `KNOWN_ISSUES.md` ISSUE 1: running the merged pack's own lint against
+  v1's output flagged 100% of the inserted characters as hard failures).
+- `scripts/generate_doc.py` still exists and is still useful (template +
+  data → txt/html/docx), but it no longer auto-patches Thai spacing. It now
+  offers `--lint`, a mechanical report-only gate powered by the merged
+  pack's linter.
 
-Properties (see `tests/test_thai_linebreak.py`):
-- **Lossless**: `strip_zwsp(fix_thai_linebreaks(text)) == text` always.
-- **Idempotent**: running it twice never double-inserts.
-- **Non-Thai-safe**: Latin words, numbers, and existing whitespace/newlines
-  are left untouched.
+## Repo layout
 
-## Usage
-
-### Just fix line-wrapping in a block of text
-
-```bash
-python3 scripts/thai_linebreak.py "ข้อความภาษาไทยยาวๆที่อยากให้ตัดบรรทัดถูกต้อง" > out.txt
+```
+KNOWN_ISSUES.md              read first
+SKILL.md                     this repo's entry-point skill file
+docs/thai-worldclass/        merged v2.1.0 pack -- the primary composition system
+  SKILL.md                   its own entry point / 17 named AI failure modes
+  protocols/                 per-route rules (Google Docs, DOCX, Typst, LaTeX/arXiv, ...)
+  scripts/                   thai_semantic_lint.py, typst_preflight.py, validate_pack.py
+  typst/, latex/             house Typst modules + LaTeX/arXiv style + examples
+scripts/
+  generate_doc.py            template+data -> txt/html/docx, with --lint
+  thai_linebreak.py           demoted; diagnostic word-segmentation only, see KNOWN_ISSUES.md
+templates/, examples/         this repo's own Jinja2 template + example data
+tests/                        tests for scripts/thai_linebreak.py
 ```
 
-Paste the contents of `out.txt` directly into Google Docs, Word, an email,
-a chat box -- anywhere. The ZWSP characters travel with the text through
-copy-paste and give the destination editor real break points.
+## Usage
 
 ### Generate a document from a template
 
@@ -47,49 +58,66 @@ pip install -r requirements.txt
 python3 scripts/generate_doc.py \
   templates/formal_letter.txt.j2 \
   examples/formal_letter.example.yaml \
-  -o out.docx -f docx
+  -o out.docx -f docx --lint
 ```
 
-Supported `-f/--format`: `txt` (paste-ready, ZWSP-fixed plain text),
-`html` (lang="th", Thai-safe font stack), `docx` (python-docx, sets both
-the Latin and East-Asian/complex-script font slots so Word doesn't silently
-fall back to a default font for the Thai glyph run).
+`--lint` runs the merged pack's mechanical Thai lint against the rendered
+text and reports findings to stderr; it does not modify the output. Add
+`--strict` to make the command exit non-zero on hard findings. Note: the
+bundled example template's prose was written as ordinary Thai body text and
+is **not** gate-clean out of the box (it still contains ordinary spaces at
+what would need to be classified breath boundaries) — this is intentional
+and disclosed, not hidden: it demonstrates that `--lint` catches real,
+unremediated issues rather than only ever reporting PASS. Fixing the
+example's prose to actually pass the gate means applying
+`docs/thai-worldclass/protocols/01-thai-semantic-breathing.md`'s semantic
+pipeline to it by hand (or by an AI doing that work deliberately), which is
+future work, not yet done.
 
-Template format: a Jinja2 text file with `#SECTION_NAME#` markers (see
-`templates/formal_letter.txt.j2`). Data is a `.yaml` or `.json` file mapping
-template variable names to values. Caveat: any rendered body line that
-itself both starts and ends with `#` (e.g. a literal `#hashtag#`, or a
-markdown `#### heading ####`) is misparsed as a new section marker -- avoid
-that shape in body text until this is tightened. The pipeline is: render Jinja2
-placeholders -> split into named sections -> apply the line-break fix to
-each section's final text -> write the requested format. The fix runs last,
-on the final text, so a placeholder value can never reintroduce an
-un-fixed Thai run.
+For a deterministic, already-gate-passing Thai formal-letter example, see
+`docs/thai-worldclass/typst/examples/formal_private_to_government.typ` and
+`docs/thai-worldclass/protocols/09-typst.md`.
 
-## Status / open decisions (not yet resolved -- read before extending)
+### Fixing/composing Thai prose for Google Docs, Word, or anywhere else
 
-This is a first working version built to a general spec ("พิมพ์ภาษาไทยแม่นยำ
-ในเครื่องมือภายนอกทั้งในคอมและ Google Docs และแก้ปัญหาการตัดบรรทัด"). A few
-scope questions were left open rather than guessed silently:
+Do not run a script and expect a patched-up answer. Read
+`docs/thai-worldclass/SKILL.md` and the protocol for your output route
+(`docs/thai-worldclass/protocols/00-routing.md`), and apply its semantic
+pipeline while writing/revising the Thai text. Use
+`docs/thai-worldclass/scripts/thai_semantic_lint.py` as a mechanical sanity
+check afterward, never as the fix itself.
 
-1. **Direct Google Docs API integration** (create/update a Doc
-   programmatically via OAuth) is *not* built yet -- the current `txt`
-   output is copy-paste-ready into Docs, which needs no credentials, but a
-   founder decision on OAuth scope/credential storage is needed before
-   building a live API integration (this workspace's `safe-live-connect`
-   and credential-handling rules apply to any such integration).
-2. Only one example template (a formal letter) exists. Real target template
-   types (certificates, official forms, contracts, ...) need to be supplied
-   or specified before more templates are built.
-3. `docx` output defaults to font "TH Sarabun New" (the Thai government's
-   standard official-document font, THSarabunPSK lineage) -- confirm this is
-   the right default, vs. e.g. Noto Sans Thai / Noto Serif Thai for other
-   use cases.
-4. PDF output is not implemented yet (candidates: LibreOffice headless
-   conversion of the `docx` output, or a LaTeX/WeasyPrint HTML->PDF path
-   using the same `html` output -- needs a decision on which toolchain to
-   depend on).
+## Status / open decisions
+
+See `docs/thai-worldclass/BUILD_REPORT.md` "Verification limitation" for
+what that pack itself discloses as unverified (no `typst` CLI in the build
+environment used, so a live Typst compile + rendered-page visual QA is
+CANNOT VERIFY until run somewhere with the CLI and Thai fonts installed —
+also true of this workstation as of 2026-09-19, verified again here).
+
+Still open / not yet built, not guessed at:
+
+1. No direct Google Docs API/OAuth integration (would need a founder
+   decision on credential handling for this workspace).
+2. `scripts/generate_doc.py`'s `#SECTION#` marker parsing has a known false
+   -positive edge case (`KNOWN_ISSUES.md` ISSUE 3).
+3. The bundled example template/data is not yet a gate-clean demonstration
+   (see above) — a real one requires doing the semantic composition work,
+   not just running a script.
+
+## Provenance
+
+`docs/thai-worldclass/` is a merged copy of a separately obtained pack,
+`thai-worldclass-publication-system` v2.1.0. Its own research/provenance
+notes (`docs/thai-worldclass/RESEARCH_NOTES_TYPST_2.1.md`,
+`docs/thai-worldclass/BUILD_REPORT.md`) document that it independently
+reimplements structural ideas from `whs/typst-govdoc` (no SPDX license
+metadata upstream; not copied verbatim) and uses `typst/typst`
+(Apache-2.0) concepts. Carried forward unchanged into this repo.
 
 ## License
 
-MIT.
+MIT (this repo's own `scripts/`, `templates/`, `examples/`, `tests/`).
+`docs/thai-worldclass/` carries its own provenance notes as described
+above; treat it as a distinct merged component, not originated in this
+repo.

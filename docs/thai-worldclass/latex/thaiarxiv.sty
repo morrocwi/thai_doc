@@ -1,0 +1,226 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{thaiarxiv}[2026/09/19 v1.1 Thai arXiv-safe publication system]
+
+% Engine gate: Thai Unicode publication profile requires XeLaTeX.
+\RequirePackage{iftex}
+\ifXeTeX\else
+  \PackageError{thaiarxiv}{This package requires XeLaTeX}{Select xelatex as the compiler.}
+\fi
+
+% Core Unicode typography. arXiv XeLaTeX requires file-name font lookup.
+\RequirePackage{fontspec}
+\RequirePackage{mathtools,amsthm}
+\RequirePackage[warnings-off={mathtools-overbracket,mathtools-colon}]{unicode-math}
+\RequirePackage[Latin,Thai]{ucharclasses}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{XCharter-Roman.otf}[
+  BoldFont=XCharter-Bold.otf,
+  ItalicFont=XCharter-Italic.otf,
+  BoldItalicFont=XCharter-BoldItalic.otf
+]
+\setsansfont{NotoSans-Regular.ttf}[
+  BoldFont=NotoSans-Bold.ttf,
+  ItalicFont=NotoSans-Italic.ttf,
+  BoldItalicFont=NotoSans-BoldItalic.ttf
+]
+\setmonofont{DejaVuSansMono.ttf}[Scale=0.88]
+\setmathfont{XCharter-Math.otf}
+
+% Thai fonts shipped in TeX Live / arXiv TL2025.
+\newfontfamily\thaiBodyFont{Norasi.otf}[
+  BoldFont=Norasi-Bold.otf,
+  ItalicFont=Norasi-Italic.otf,
+  BoldItalicFont=Norasi-BoldItalic.otf,
+  Scale=MatchLowercase
+]
+\newfontfamily\thaiSansFont{Garuda.otf}[
+  BoldFont=Garuda-Bold.otf,
+  ItalicFont=Garuda-Oblique.otf,
+  BoldItalicFont=Garuda-BoldOblique.otf,
+  Scale=MatchLowercase
+]
+\newenvironment{ThaiAutoFont}{\thaiBodyFont}{}
+\setTransitionTo{Thai}{\begin{ThaiAutoFont}}
+\setTransitionFrom{Thai}{\end{ThaiAutoFont}}
+\newcommand{\ThaiSans}[1]{{\thaiSansFont #1}}
+
+% Thai line breaking via XeTeX; do not depend on inserted spaces for wrapping.
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip=0pt plus 0.08em minus 0.02em
+\ifdefined\XeTeXgenerateactualtext
+  \XeTeXgenerateactualtext=1
+\fi
+
+% Semantic breathing boundary. Level 1-2 only. Stronger pauses use syntax/punctuation.
+% Break is allowed before the tiny visual breath; if TeX breaks there, the following glue is discarded.
+\newcommand{\ThaiLightBreath}{\hskip0pt\penalty35\hskip0.08em plus 0.018em minus 0.010em\relax}
+\newcommand{\ThaiBreath}{\hskip0pt\penalty50\hskip0.14em plus 0.025em minus 0.015em\relax}
+% Short Latin lexical atoms should not be stretched or split by justification.
+\newcommand{\Lexical}[1]{\mbox{#1}}
+
+% Page and microtypography.
+\RequirePackage{geometry}
+\makeatletter
+\if@twocolumn
+  \geometry{a4paper,top=18mm,bottom=20mm,left=17mm,right=17mm}
+  \setlength{\columnsep}{6.5mm}
+\else
+  \geometry{a4paper,top=22mm,bottom=24mm,left=24mm,right=24mm}
+\fi
+\makeatother
+\RequirePackage[protrusion=true,expansion=false]{microtype}
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{0.7em}
+\pretolerance=400
+\tolerance=1200
+\clubpenalty=8000
+\widowpenalty=8000
+\displaywidowpenalty=8000
+\raggedbottom
+
+% Headings and captions.
+\RequirePackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.55em}{}
+\titlespacing*{\section}{0pt}{1.4\baselineskip}{0.55\baselineskip}
+\titlespacing*{\subsection}{0pt}{1.0\baselineskip}{0.4\baselineskip}
+\RequirePackage[font=small,labelfont=bf,hypcap=false]{caption}
+\renewcommand{\figurename}{รูป}
+\renewcommand{\tablename}{ตาราง}
+\renewcommand{\refname}{เอกสารอ้างอิง}
+\renewcommand{\abstractname}{บทคัดย่อ}
+
+% Mathematics.
+\RequirePackage{graphicx}
+\RequirePackage{cuted}
+\RequirePackage{pdflscape}
+\allowdisplaybreaks[2]
+\newtheorem{theorem}{ทฤษฎีบท}[section]
+\newtheorem{lemma}[theorem]{บทตั้ง}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{บทนิยาม}
+\theoremstyle{remark}
+\newtheorem*{remark}{หมายเหตุ}
+
+% Last-resort single-line equation fitter. Structural breaking is preferred.
+\newsavebox{\TAEquationBox}
+\newcommand{\FitEquation}[1]{%
+  \sbox{\TAEquationBox}{$\displaystyle #1$}%
+  \ifdim\wd\TAEquationBox>\linewidth
+    \ifdim\wd\TAEquationBox>1.15\linewidth
+      \PackageWarningNoLine{thaiarxiv}{TA-EQ-SEVERE: equation exceeds 115 percent of available width; restructure or use WideEquation}%
+    \else
+      \PackageWarningNoLine{thaiarxiv}{TA-EQ-SCALED: equation scaled to fit; prefer align/multline when possible}%
+    \fi
+    \resizebox{\linewidth}{!}{\usebox{\TAEquationBox}}%
+  \else
+    \usebox{\TAEquationBox}%
+  \fi
+}
+
+% Full-width equations in two-column mode; normal equation width in one-column mode.
+\makeatletter
+\newenvironment{WideEquation}{%
+  \if@twocolumn
+    \begin{strip}\vspace{-0.35\baselineskip}\begin{equation}
+  \else
+    \begin{equation}
+  \fi
+}{%
+  \if@twocolumn
+    \end{equation}\vspace{-0.35\baselineskip}\end{strip}
+  \else
+    \end{equation}
+  \fi
+}
+\makeatother
+
+% Tables.
+\RequirePackage{booktabs,tabularx,array,longtable,makecell,siunitx,adjustbox}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\newcolumntype{Q}{>{\raggedleft\arraybackslash}X}
+\sisetup{detect-all,group-separator={,},group-minimum-digits=4}
+\newsavebox{\TAContentBox}
+\newcommand{\FitToColumn}[1]{%
+  \sbox{\TAContentBox}{#1}%
+  \ifdim\wd\TAContentBox>\linewidth
+    \ifdim\wd\TAContentBox>1.15\linewidth
+      \PackageWarningNoLine{thaiarxiv}{TA-TABLE-SEVERE: content exceeds 115 percent of column width; use table* / split / landscape / appendix}%
+    \else
+      \PackageWarningNoLine{thaiarxiv}{TA-TABLE-SCALED: content scaled to column width}%
+    \fi
+    \resizebox{\linewidth}{!}{\usebox{\TAContentBox}}%
+  \else
+    \usebox{\TAContentBox}%
+  \fi
+}
+\newcommand{\FitToTextWidth}[1]{%
+  \sbox{\TAContentBox}{#1}%
+  \ifdim\wd\TAContentBox>\textwidth
+    \ifdim\wd\TAContentBox>1.15\textwidth
+      \PackageWarningNoLine{thaiarxiv}{TA-TABLE-SEVERE: content exceeds 115 percent of text width; split or move to landscape appendix}%
+    \else
+      \PackageWarningNoLine{thaiarxiv}{TA-TABLE-SCALED: content scaled to full text width}%
+    \fi
+    \resizebox{\textwidth}{!}{\usebox{\TAContentBox}}%
+  \else
+    \usebox{\TAContentBox}%
+  \fi
+}
+\newenvironment{ReadableTable}{\begingroup\small\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}}{\endgroup}
+\makeatletter
+\if@twocolumn
+  \newenvironment{WideTable}[1][t]{\begin{table*}[#1]}{\end{table*}}
+\else
+  \newenvironment{WideTable}[1][tbp]{\begin{table}[#1]}{\end{table}}
+\fi
+\makeatother
+
+% Landscape is an escalation path for genuinely wide tables, not a default layout.
+\makeatletter
+\newif\ifTALandscapeRestoreTwoCol
+\newenvironment{FullWidthLandscape}{%
+  \if@twocolumn
+    \global\TALandscapeRestoreTwoColtrue\clearpage\onecolumn
+  \else
+    \global\TALandscapeRestoreTwoColfalse
+  \fi
+  \begin{landscape}
+}{%
+  \end{landscape}
+  \ifTALandscapeRestoreTwoCol\clearpage\twocolumn\fi
+}
+\makeatother
+
+% Long tables cannot span both columns. In two-column papers this deliberately moves
+% the long table to a full-width page and restores two-column mode afterwards.
+\makeatletter
+\newif\ifTArestoretwocol
+\newenvironment{FullWidthLongTable}{%
+  \if@twocolumn
+    \global\TArestoretwocoltrue\clearpage\onecolumn
+  \else
+    \global\TArestoretwocolfalse
+  \fi
+}{%
+  \ifTArestoretwocol\clearpage\twocolumn\fi
+}
+\makeatother
+
+% Floats and references.
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.82}
+\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage[hidelinks,unicode=true]{hyperref}
+\RequirePackage{bookmark}
+\urlstyle{same}
+
+% Machine-readable build marker for preflight.
+\typeout{THAIARXIV-SYSTEM: v1.1 engine=XeLaTeX}
