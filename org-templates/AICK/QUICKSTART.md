@@ -41,6 +41,20 @@ PASS` = uses the locked class unmodified, no locked macro/palette
 redefined, correct page order. Neither compiles the document or checks
 Thai prose quality — see `README.md` for what is NOT verified.
 
+## Check references
+
+```bash
+python3 org-templates/AICK/scripts/aick_check_references.py \
+  --data <your_data.yaml>
+```
+
+A thin wrapper — the actual checking happens in **glosa**, checked out as a sibling repo
+(`GLOSA_REPO_PATH`, default `~/ANSE.ASIA/glosa`; a missing glosa checkout fails loudly rather than
+skipping the check). Thai-language references are checked via glosa's TCI/ThaiJO backends
+specifically, because international citation databases have known coverage gaps for
+Thai-language journals. See `README.md` §"Generator and checker scripts" and glosa's
+`scripts/CITATION_CHECKER.md` for what is and is not verified.
+
 ## Compile
 
 ```bash
