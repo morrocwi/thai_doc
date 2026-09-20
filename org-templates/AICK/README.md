@@ -189,7 +189,7 @@ committed here, verified directly (not asserted from a prior report):
   author/creator metadata of any kind.
 - `source/aick-thai-preprint-template-preview.pdf` — opened with
   `pikepdf`; `docinfo` contains only standard LaTeX-toolchain fields —
-  `/Producer: xdvipdfmx (20260305)`, `/Creator: LaTeX with hyperref`,
+  `/Producer: xdvipdfmx (20240305)`, `/Creator: LaTeX with hyperref`,
   `/CreationDate: D:20260920025931Z` — **no personal name, no author
   field**. This is the ordinary toolchain fingerprint every XeLaTeX/
   hyperref PDF carries, not identifying information about a person.
