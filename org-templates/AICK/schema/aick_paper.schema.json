@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/morrocwi/thai_doc/org-templates/AICK/schema/aick_paper.schema.json",
+  "title": "AICK Thai Preprint — paper data",
+  "description": "Structured-data input for org-templates/AICK/scripts/aick_generate.py, which renders a .tex file for the aick-thai-preprint.cls house class (see org-templates/AICK/source/). Field names map to the class's \\AICK... metadata macros and to the body structure of aick-paper-template.tex.",
+  "type": "object",
+  "required": [
+    "title",
+    "subtitle",
+    "author",
+    "authorshort",
+    "orcid",
+    "affiliation",
+    "shorttitle",
+    "version",
+    "date",
+    "abstract",
+    "keywords",
+    "methodology_note",
+    "sections"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Maps to \\AICKTitle{...} -- the main title shown in large bold on page 1."
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Maps to \\AICKSubtitle{...} -- an optional-in-the-class but required-here subtitle line under the title. Pass an empty string to omit it (the class already handles an empty \\AICK@subtitle by not rendering the line)."
+    },
+    "author": {
+      "type": "string",
+      "description": "Maps to \\AICKAuthor{...} -- the full author name shown under the title, e.g. 'ชื่อผู้เขียน (English Name)'."
+    },
+    "authorshort": {
+      "type": "string",
+      "description": "Maps to \\AICKAuthorShort{...} -- short author name/surname shown in the running header (fancyhdr, left)."
+    },
+    "orcid": {
+      "type": "string",
+      "description": "Maps to \\AICKORCID{...} -- bare ORCID id (e.g. 0000-0000-0000-0000). Pass an empty string to omit the orcidlink icon (the class already handles an empty \\AICK@orcid)."
+    },
+    "affiliation": {
+      "type": "string",
+      "description": "Maps to \\AICKAffiliation{...} -- shown next to the author on page 1, e.g. 'Center for AI Civic Knowledge'."
+    },
+    "shorttitle": {
+      "type": "string",
+      "description": "Maps to \\AICKShortTitle{...} -- short title shown in the running header (fancyhdr, right)."
+    },
+    "version": {
+      "type": "string",
+      "description": "Maps to \\AICKVersion{...} -- version tag shown near PREPRINT on page 1 and in the footer (e.g. 'v1.0')."
+    },
+    "date": {
+      "type": "string",
+      "description": "Maps to \\AICKDate{...} -- date string shown near PREPRINT on page 1, Thai-formatted (e.g. '20 กันยายน 2026')."
+    },
+    "abstract": {
+      "type": "string",
+      "description": "Maps to \\AICKAbstract{...} -- the abstract paragraph(s) rendered on page 1 under the gold rule, before the keywords line."
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Maps to \\AICKKeywords{...} -- a single string of keywords, semicolon-separated, rendered after 'คำสำคัญ:' on page 1."
+    },
+    "methodology_note": {
+      "type": "string",
+      "description": "Maps to the argument of \\AICKMethodologyPage{...} -- the required page-2 methodological/status note (paper status, human-AI role disclosure, verification stance)."
+    },
+    "sections": {
+      "type": "array",
+      "description": "Ordered body sections. Each entry becomes one \\section{heading} followed by body on its own paragraph(s), starting on page 3 after the methodology page.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["heading", "body"],
+        "additionalProperties": false,
+        "properties": {
+          "heading": {
+            "type": "string",
+            "description": "Maps to the argument of \\section{...} for this body section."
+          },
+          "body": {
+            "type": "string",
+            "description": "Maps to the paragraph text rendered directly under this \\section{...}, verbatim (LaTeX-escaped only where the data itself contains no raw LaTeX)."
+          }
+        }
+      }
+    },
+    "acknowledgements": {
+      "type": "string",
+      "description": "Optional. Maps to \\AICKAcknowledgements{...}, rendered after the body sections if present. Omit the field (or leave it empty) to skip this end-matter block entirely."
+    },
+    "declarations": {
+      "type": "string",
+      "description": "Optional. Maps to \\AICKDeclarations{...} (status/COI/data-availability statements), rendered after acknowledgements if present. Omit the field (or leave it empty) to skip this end-matter block entirely."
+    },
+    "references": {
+      "type": "array",
+      "description": "Optional. Each string becomes one \\item inside the AICKReferences environment, rendered last. Omit the field (or leave it an empty array) to skip the references block entirely.",
+      "items": {
+        "type": "string",
+        "description": "One full reference-list entry, rendered verbatim as the body of one \\item."
+      }
+    }
+  }
+}
