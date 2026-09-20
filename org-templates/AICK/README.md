@@ -144,6 +144,35 @@ The same check was also run directly against
 `source/aick-paper-template.tex` (the founder-supplied original) and
 against the file rendered from `aick_generate.py`: both PASS.
 
+### 4. `aick_check_references.py` — reference-list checker (cross-repo, via glosa)
+
+Thin wrapper only — it implements **no citation-verification logic itself**. It extracts
+reference strings from either a rendered `.tex` (the `\item` lines inside the `AICKReferences`
+environment) or a structured `data.yaml`/`data.json`'s `references:` list (per
+`schema/aick_paper.schema.json`), then shells out, once per reference, to
+**glosa's `scripts/cite_check_adhoc.py`** and prints the combined JSON + a summary table.
+
+**Cross-repo dependency:** glosa must be checked out as a sibling repo. The path is read from the
+`GLOSA_REPO_PATH` environment variable, defaulting to `~/ANSE.ASIA/glosa`. A missing glosa
+checkout, or a glosa checkout without `scripts/cite_check_adhoc.py`, is a **loud failure**
+(non-zero exit, clear stderr message) — it never silently skips reference checking.
+
+```bash
+python3 org-templates/AICK/scripts/aick_check_references.py \
+  --data org-templates/AICK/examples/example_paper.data.yaml
+# or, against a rendered .tex:
+python3 org-templates/AICK/scripts/aick_check_references.py --tex /tmp/example_paper.tex
+# or, with glosa checked out somewhere other than ~/ANSE.ASIA/glosa:
+GLOSA_REPO_PATH=/path/to/glosa python3 org-templates/AICK/scripts/aick_check_references.py --data ...
+```
+
+Each reference gets glosa's own `existence_tier` (`VERIFIED_EXACT`/`VERIFIED_FUZZY`/`AMBIGUOUS`/
+`NOT_FOUND`/`CHECK_ERROR`), a `venue_tier` reading, and glosa's own mandatory
+`LIGHTWEIGHT_ADHOC_CHECK` disclosure — see glosa's `scripts/CITATION_CHECKER.md` for what that
+checker actually does and does not verify. **Thai-language references are checked via glosa's
+TCI/ThaiJO backends specifically, because international databases (Crossref/OpenAlex/PubMed) have
+known coverage gaps for Thai-language journals** — see glosa's `scripts/lit_sources_thai.py`.
+
 ### What the checkers do NOT verify (disclosed)
 
 - **Neither checker compiles the document.** No `xelatex`/`latexmk` run
