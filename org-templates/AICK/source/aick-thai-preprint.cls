@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{aick-thai-preprint}[2026/09/20 v1.0 Center for AI Civic Knowledge Thai Preprint]
+\ProvidesClass{aick-thai-preprint}[2026/09/20 v1.0.1 Center for AI Civic Knowledge Thai Preprint]
 
 % ================================================================
 % CANONICAL HOUSE CLASS — CENTER FOR AI CIVIC KNOWLEDGE
@@ -97,7 +97,7 @@
 % LOCKED RUNNING IDENTITY
 % ================================================================
 \pagestyle{fancy}
-\setlength{\headheight}{16pt}
+\setlength{\headheight}{16.23pt}
 \fancyhf{}
 \fancyhead[L]{\small \AICK@authorshort}
 \fancyhead[R]{\small \AICK@shorttitle}

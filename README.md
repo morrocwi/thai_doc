@@ -14,6 +14,12 @@ Thai-language document generation and layout-fix system for external tools
    authority on *how* to fix Thai line-wrap/justification/layout problems.
 3. **`SKILL.md`** (this repo's own) — the entry point that ties the above
    two together and describes this repo's own scripts.
+4. **`TOOLCHAIN.md`** — before running anything in a route you haven't used
+   on this machine before (LaTeX/XeLaTeX, Typst, DOCX, Google Docs), check
+   this file first. It lists exactly what system package each route needs,
+   the real install command, and a real verification command — per-route
+   status (✅ verified here / ⚠️ not installed here) is kept current, not
+   guessed.
 
 ## What actually changed here (history, short version)
 
