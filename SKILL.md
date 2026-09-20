@@ -69,6 +69,24 @@ letter/document to a Thai government agency, check whether
    authoring-instruction markers that must be replaced rather than kept
    literally, known-not-yet-locked file types, etc.) before drafting.
 
+## Center for AI Civic Knowledge (AICK) house template: `org-templates/AICK/`
+
+**MANDATORY, not optional guidance** — the same discovery pattern as the
+government-agency section above, applied to AICK's own house style.
+Before drafting ANY Center for AI Civic Knowledge Thai-language preprint
+paper, check `org-templates/AICK/` and **read
+`org-templates/AICK/QUICKSTART.md` first** (it points to
+`org-templates/AICK/README.md` for the full policy, the locked-vs-editable
+list, and disclosed checker limitations). Every AICK Thai preprint MUST
+use the house class `org-templates/AICK/source/aick-thai-preprint.cls` —
+this is official center policy, not a style suggestion, and a per-article
+`.tex` file may edit only its `\AICK...` metadata and body content, never
+the locked palette/front-matter/header-footer/logo-position blocks (see
+that README for the exact locked list). Run
+`org-templates/AICK/scripts/aick_template_lock.py check <draft.tex>`
+before treating an AICK draft as done, same discipline as the NIA gate
+above.
+
 ## This repo's own tooling (`scripts/`)
 
 - `scripts/generate_doc.py` — Jinja2 template + yaml/json data →

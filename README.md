@@ -47,6 +47,8 @@ scripts/
   thai_linebreak.py           demoted; diagnostic word-segmentation only, see KNOWN_ISSUES.md
 templates/, examples/         this repo's own Jinja2 template + example data
 tests/                        tests for scripts/thai_linebreak.py
+gov-templates/                official government-agency letter templates, one folder per agency (see gov-templates/README.md)
+org-templates/AICK/           Center for AI Civic Knowledge Thai preprint house template + generate/check pipeline (see org-templates/AICK/README.md)
 ```
 
 ## Usage
@@ -86,6 +88,18 @@ Do not run a script and expect a patched-up answer. Read
 pipeline while writing/revising the Thai text. Use
 `docs/thai-worldclass/scripts/thai_semantic_lint.py` as a mechanical sanity
 check afterward, never as the fix itself.
+
+### Producing an AICK house-styled paper
+
+`org-templates/AICK/` holds the Center for AI Civic Knowledge's mandatory
+Thai preprint house template (`aick-thai-preprint.cls`) plus a
+structured-data generate/check pipeline built on top of it, following the
+same `source/` + `MANIFEST.md` + `README.md` convention `gov-templates/`
+uses for agency letters, adapted for a LaTeX house class. Read
+`org-templates/AICK/QUICKSTART.md` first — it is the short, copy-paste
+path (schema fields, generate command, check commands, compile command);
+`org-templates/AICK/README.md` has the full policy and the locked-vs-
+editable list.
 
 ## Status / open decisions
 
