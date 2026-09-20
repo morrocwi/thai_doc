@@ -50,7 +50,10 @@ python3 org-templates/AICK/scripts/aick_check_references.py \
 
 A thin wrapper — the actual checking happens in **glosa**, checked out as a sibling repo
 (`GLOSA_REPO_PATH`, default `~/ANSE.ASIA/glosa`; a missing glosa checkout fails loudly rather than
-skipping the check). Thai-language references are checked via glosa's TCI/ThaiJO backends
+skipping the check). If your local glosa checkout predates the citation-checker work
+(`scripts/cite_check_adhoc.py` merged 2026-09-20 in glosa PR #5), `git pull` it first — the script
+will name this exact missing file if you forget. Thai-language references are checked via glosa's
+TCI/ThaiJO backends
 specifically, because international citation databases have known coverage gaps for
 Thai-language journals. See `README.md` §"Generator and checker scripts" and glosa's
 `scripts/CITATION_CHECKER.md` for what is and is not verified.
